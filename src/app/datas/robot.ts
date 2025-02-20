@@ -3,11 +3,10 @@ import { Bloc, TypeBloc } from "./bloc";
 import { Labyrinthe } from "./labyrinthe";
 
 export class Robot {
-
     position: Point;
-    direction: Direction;
-    cardinalite: Cardinalite; 
-    changementDirectionCpte: number;
+    direction: Direction;       // GAUCHE, AVANCER, DROITE
+    cardinalite: Cardinalite;   // NORD, EST, SUD, OUEST
+    changementDirectionCpte: number;    // selon le virage choisi
 
     constructor(position: Point, direction: Direction, cardinalite: Cardinalite, changementDirectionCpte: number) {
         this.position = position;

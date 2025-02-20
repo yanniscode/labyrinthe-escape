@@ -35,8 +35,8 @@ export class AppComponent {
 
     // méthode de déplacement du robot
     this.sortirDuLabyrinthe(exitPosition, startPosition).subscribe();
-  };
-
+  }
+  
   private sortirDuLabyrinthe(exitPosition: Point, startPosition: Point): Observable<void> {
     // décompte à 0 en début de trajet:
     this.robot = new Robot(startPosition, Direction.AVANCER, Cardinalite.NORD, 0);
