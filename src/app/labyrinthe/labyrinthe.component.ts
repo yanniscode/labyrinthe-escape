@@ -42,6 +42,7 @@ export class LabyrintheComponent {
   compteToursBoucle: number = 0;
 
   items: number[] = [];
+  // nécessaire pour l'animation (écoute d'observable avec rxjs)
   updateSubscription!: Subscription;
 
   constructor(private messageService: MessageService) {
@@ -54,7 +55,7 @@ export class LabyrintheComponent {
 
   startIntro(): void {
     this.isGameStarted = true;
-    // construction du labyrinthe 
+    // construction du labyrinthe
     this.labyrinthe = new Labyrinthe(12, 11);
     this.exitPosition = new Point(1, 10);
     this.startPosition = new Point(5, 5);
@@ -84,15 +85,14 @@ export class LabyrintheComponent {
           this.updateSubscription.unsubscribe();
           this.startIntro();
         }
-        
+
         if(finished === false) {
           // méthode de déplacement du robot
-          this.sortirDuLabyrinthe() 
+          this.sortirDuLabyrinthe()
           this.log("robotAction");
           this.log("Robot X = "+ this.robot.position.x.toString());
           this.log("Robot Y = "+ this.robot.position.y.toString());
         }
-
       })
     ).subscribe();
   }
@@ -120,7 +120,11 @@ export class LabyrintheComponent {
     this.log("*** fin du pas n° "+ this.compteToursBoucle);
   }
 
-  updateLabyrintheWithRobot(): Bloc[][] {
+  private updateLabyrintheWithRobot(): Bloc[][] {
+    // test autre option:
+    // mais pb, Robot comme cloné, pas déplacé : copie de la ref, pas de la valeur, et pb aussi malgré slice()
+    // this.labyrinthe.blocs[this.robot.position.x][this.robot.position.y].typeBloc = TypeBloc["ROBOT"];
+    // return this.labyrinthe.blocs.slice();
 
     return this.labyrinthe.blocs.map((row) => {
         return row.map((cell) => {
@@ -128,7 +132,7 @@ export class LabyrintheComponent {
             if (cell.position.x === this.robot.position.x && cell.position.y === this.robot.position.y) {
                 return {
                     ...cell,
-                    typeBloc: TypeBloc.ROBOT, // Remplace le typeBloc par TypeBloc.ROBOT
+                    typeBloc: TypeBloc.ROBOT, // Remplace le typeBloc.VIDE par TypeBloc.ROBOT
                     position: cell.position
                 };
             }
@@ -136,12 +140,12 @@ export class LabyrintheComponent {
         });
     });
   }
-    
+
   private afficherLogsRobot(): void {
     this.log("Position de la sortie: x = "+ this.exitPosition.x +" / y = "+ this.exitPosition.y);
     this.log("Position de début: x = "+ this.startPosition.x +" / y = "+ this.startPosition.y);
     this.log("Robot position - x ="+ this.robot.position.x +" / y ="+ this.robot.position.y
-      + " / Direction ="+ this.robot.direction + " / Cardinalité ="+ this.robot.cardinalite 
+      + " / Direction ="+ this.robot.direction + " / Cardinalité ="+ this.robot.cardinalite
       +" /changementDirectionCpte = "+ this.robot.changementDirectionCpte);
   }
 
