@@ -6,13 +6,3 @@ h1 {
     font-weight: lighter;
     width: 100%;
 }
-
-.content {
-    background-color: #c7c1c1;
-    display: flex;
-    justify-content: space-around;
-    color: #117456;
-    width: 100%;
-    /* max-width: 700px; modif */
-    /* margin-bottom: 3rem; */
-}

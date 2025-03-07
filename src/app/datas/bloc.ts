@@ -12,6 +12,7 @@ export class Bloc {
 
 export enum TypeBloc {
     MUR = "X",
-    VIDE = " ",
-    SORTIE = "S"
+    VIDE = "_",
+    SORTIE = "S",
+    ROBOT = "R"
 }

@@ -1,14 +1,5 @@
 <h1>Escape the Lab</h1>
-<section class="content" *ngIf="isGameStarted">
+
+<!-- <div *ngIf="isGameStarted"> -->
   <app-labyrinthe></app-labyrinthe>
-  <!-- <div *ngFor='let row of labyrinthe.blocs'>
-    <div *ngFor='let bloc of row'>{{bloc.typeBloc}}</div>
-  </div> -->
-</section>
-<section class="content">
-  <form (ngSubmit)="startGame()" #labyrintheForm="ngForm">
-    <div>
-      <button type="submit" class="badge">Start</button>
-    </div>
-  </form>
-</section>
+<!-- </div> -->

@@ -1,4 +1,18 @@
-<h2>labyrinthe (todo)</h2>
-<div>
+<div class="content">
+    <div class="labyrinthe">
+      <div *ngFor='let row of labyrinthe.blocs' @labyrintheAnimation>
+        <div *ngFor='let bloc of row'>{{bloc.typeBloc}}</div>
+      </div>
+    </div>
+    <div>
+      <form (ngSubmit)="startRobot()" #labyrintheForm="ngForm">
+        <div class="start-button">
+          <button type="submit">Start</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <div>
     <app-messages></app-messages>
 </div>

@@ -74,27 +74,8 @@ export class Robot {
     private seDeplacer(robot: Robot,  dir: Direction, card: Cardinalite): Robot {
 
         let nvCard: Cardinalite = this.utiliserCardinalite(dir, card);
-        if(nvCard === Cardinalite.NORD) {
-            robot.position.x -= 1;
-            robot.cardinalite = nvCard;
-            return robot;
-        }
-        else if(nvCard === Cardinalite.EST) {
-            robot.position.y += 1;
-            robot.cardinalite = nvCard;
-            return robot;
-        }
-        else if(nvCard === Cardinalite.SUD) {
-            robot.position.x += 1;
-            robot.cardinalite = nvCard;
-            return robot;
-        }
-        else {
-            // sinon: dir = Ouest
-            robot.position.y -= 1;
-            robot.cardinalite = nvCard;
-            return robot;
-        }
+
+        return this.avancer(nvCard, robot);
     }
 
     private utiliserCardinalite(dir: Direction, card: Cardinalite): Cardinalite {
@@ -124,31 +105,37 @@ export class Robot {
     }
 
     private seRetourner(robot: Robot,  dir: Direction, card: Cardinalite): Robot {
-        let nvCard: Cardinalite = this.utiliserCardinalitePourSeRetourner(dir, card);
-        if(nvCard === Cardinalite.NORD) {
-            robot.position.x -= 1;
-            robot.cardinalite = nvCard;
+        let nvCard: Cardinalite = this.utiliserCardinalitePourSeDeplacer(dir, card);
+
+        return this.avancer(nvCard, robot);
+    }
+
+    private avancer(card: Cardinalite, robot: Robot): Robot {
+        // ensuite, méthode commune à avancer (à refacto ici)
+        if(card === Cardinalite.NORD) {
+            robot.position.y -= 1;
+            robot.cardinalite = card;
             return robot;
         }
-        else if(nvCard === Cardinalite.EST) {
-            robot.position.y += 1;
-            robot.cardinalite = nvCard;
-            return robot;
-        }
-        else if(nvCard === Cardinalite.SUD) {
+        else if(card === Cardinalite.EST) {
             robot.position.x += 1;
-            robot.cardinalite = nvCard;
+            robot.cardinalite = card;
+            return robot;
+        }
+        else if(card === Cardinalite.SUD) {
+            robot.position.y += 1;
+            robot.cardinalite = card;
             return robot;
         }
         else {
             // sinon: dir = Ouest
-            robot.position.y -= 1;
-            robot.cardinalite = nvCard;
+            robot.position.x -= 1;
+            robot.cardinalite = card;
             return robot;
         }
     }
 
-    private utiliserCardinalitePourSeRetourner(dir: Direction, card: Cardinalite): Cardinalite {
+    private utiliserCardinalitePourSeDeplacer(dir: Direction, card: Cardinalite): Cardinalite {
         if(dir === Direction.AVANCER) {
             return card;
         } else if(dir === Direction.DROITE) {
@@ -182,33 +169,33 @@ export class Robot {
 
     private trouverPositionMurAGauche(point: Point, card: Cardinalite): Point {
         if( card === Cardinalite.NORD) {
-            return new Point(point.x, point.y-1);
-        }
-        else if(card === Cardinalite.EST) {
             return new Point(point.x-1, point.y);
         }
+        else if(card === Cardinalite.EST) {
+            return new Point(point.x, point.y-1);
+        }
         else if( card === Cardinalite.SUD) {
-            return new Point(point.x, point.y+1);
+            return new Point(point.x+1, point.y);
         }
         else {
             // sinon: dir Ouest
-            return new Point(point.x+1, point.y);
+            return new Point(point.x, point.y+1);
         }    
     }
     
     private trouverPositionMurADroite(point: Point, card: Cardinalite): Point {
         if( card === Cardinalite.NORD) {
-            return new Point(point.x, point.y+1);
-        }
-        else if(card === Cardinalite.EST) {
             return new Point(point.x+1, point.y);
         }
+        else if(card === Cardinalite.EST) {
+            return new Point(point.x, point.y+1);
+        }
         else if( card === Cardinalite.SUD) {
-            return new Point(point.x, point.y-1);
+            return new Point(point.x-1, point.y);
         }
         else {
             // sinon: dir Ouest
-            return new Point(point.x-1, point.y);
+            return new Point(point.x, point.y-1);
         }    
     }
 
@@ -222,17 +209,17 @@ export class Robot {
 
     private trouverPositionMurEnFace(point: Point, card: Cardinalite): Point {
         if( card === Cardinalite.NORD) {
-            return new Point(point.x-1, point.y);
+            return new Point(point.x, point.y-1);
         }
         else if(card === Cardinalite.EST) {
-            return new Point(point.x, point.y+1);
+            return new Point(point.x+1, point.y);
         }
         else if( card === Cardinalite.SUD) {
-            return new Point(point.x+1, point.y);
+            return new Point(point.x, point.y+1);
         }
         else {
             // sinon: dir Ouest
-            return new Point(point.x, point.y-1);
+            return new Point(point.x-1, point.y);
         }    
     }
 }
