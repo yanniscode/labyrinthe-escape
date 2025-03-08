@@ -1,8 +1,9 @@
+import { LabyrintheComponent } from "../labyrinthe/labyrinthe.component";
 import { Point } from "./Point";
 import { Bloc, TypeBloc } from "./bloc";
-import { Labyrinthe } from "./labyrinthe";
 
 export class Robot {
+
     position: Point;
     direction: Direction;       // GAUCHE, AVANCER, DROITE
     cardinalite: Cardinalite;   // NORD, EST, SUD, OUEST
@@ -15,17 +16,17 @@ export class Robot {
         this.changementDirectionCpte = changementDirectionCpte;
     }
 
-    // ss-methode principale 1
-    public avancerToutDroitOuAllerADroite(labyrinthe: Labyrinthe, robot: Robot): Robot {
+    // sous-methode principale 1
+    public avancerToutDroitOuAllerADroite(robot: Robot): Robot {
         let positionMurADroite: Point = robot.trouverPositionMurADroite(robot.position, robot.cardinalite);
-        let murDeDroiteBloc = labyrinthe.blocs[positionMurADroite.x][positionMurADroite.y];
+        let murDeDroiteBloc = LabyrintheComponent.labyrinthe.blocs[positionMurADroite.x][positionMurADroite.y];
         // si le robot trouve un coin à sa droite, il se retourne
-        if (TypeBloc.MUR === robot.getElementEnFace(labyrinthe, robot).typeBloc && TypeBloc.MUR === murDeDroiteBloc.typeBloc) {
+        if (TypeBloc.MUR === robot.getElementEnFace(robot).typeBloc && TypeBloc.MUR === murDeDroiteBloc.typeBloc) {
             console.log("Le robot a pris un coin à sa droite ! il se retourne.");
             robot.changementDirectionCpte -= 2;
             return robot.seRetourner(robot, Direction.DROITE, robot.cardinalite);
         // si un mur en face, tourner à droite:
-        } else if(TypeBloc.MUR === robot.getElementEnFace(labyrinthe, robot).typeBloc) {
+        } else if(TypeBloc.MUR === robot.getElementEnFace(robot).typeBloc) {
             console.log("Le robot a pris un mur ! Il tourne à droite.");
             robot.changementDirectionCpte -= 1;
             return robot.seDeplacer(robot, Direction.DROITE, robot.cardinalite);
@@ -37,13 +38,13 @@ export class Robot {
         }
     }
 
-    // ss-methode principale 2 
-    public suivreLeMurDeGauche(labyrinthe: Labyrinthe, robot: Robot): Robot {
+    // sous-methode principale 2 
+    public suivreLeMurDeGauche(robot: Robot): Robot {
         // scanner le mur:
         let positionMurAGauche: Point = this.trouverPositionMurAGauche(robot.position, robot.cardinalite);
-        let murDeGaucheBloc = labyrinthe.blocs[positionMurAGauche.x][positionMurAGauche.y];
+        let murDeGaucheBloc = LabyrintheComponent.labyrinthe.blocs[positionMurAGauche.x][positionMurAGauche.y];
         let positionMurADroite: Point = this.trouverPositionMurADroite(robot.position, robot.cardinalite);
-        let murDeDroiteBloc: Bloc = labyrinthe.blocs[positionMurADroite.x][positionMurADroite.y];
+        let murDeDroiteBloc: Bloc = LabyrintheComponent.labyrinthe.blocs[positionMurADroite.x][positionMurADroite.y];
 
         // si pas de bloc à la gauche du robot:
         if(TypeBloc.MUR !== murDeGaucheBloc.typeBloc) {
@@ -53,13 +54,13 @@ export class Robot {
 
         // si cul de sac devant le robot: (test de mur de gauche, face et droite, cette fois)
         } else if(TypeBloc.MUR === murDeGaucheBloc.typeBloc
-            && TypeBloc.MUR === this.getElementEnFace(labyrinthe, robot).typeBloc
+            && TypeBloc.MUR === this.getElementEnFace(robot).typeBloc
             && TypeBloc.MUR === murDeDroiteBloc.typeBloc) {
             // demi-tour = 2 fois tourner à droite:
             robot.changementDirectionCpte -= 2;
             return this.seRetourner(robot, Direction.DROITE, robot.cardinalite);
         
-        } else if(TypeBloc.MUR === this.getElementEnFace(labyrinthe, robot).typeBloc
+        } else if(TypeBloc.MUR === this.getElementEnFace(robot).typeBloc
         ) {
             // tourner à droite:
             robot.changementDirectionCpte -= 1;
@@ -200,9 +201,9 @@ export class Robot {
     }
 
     // rechercher un obstacle devant
-    private getElementEnFace(labyrinthe: Labyrinthe, robot: Robot): Bloc {
+    private getElementEnFace(robot: Robot): Bloc {
         let positionElementEnFace: Point = this.trouverPositionMurEnFace(robot.position, robot.cardinalite);
-        let murBlocEnFace: Bloc = labyrinthe.blocs[positionElementEnFace.x][positionElementEnFace.y];
+        let murBlocEnFace: Bloc = LabyrintheComponent.labyrinthe.blocs[positionElementEnFace.x][positionElementEnFace.y];
         
         return murBlocEnFace;
     }
@@ -218,7 +219,7 @@ export class Robot {
             return new Point(point.x, point.y+1);
         }
         else {
-            // sinon: dir Ouest
+            // sinon: direction Ouest
             return new Point(point.x-1, point.y);
         }    
     }

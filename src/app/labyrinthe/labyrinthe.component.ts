@@ -3,7 +3,7 @@ import { MessagesComponent } from "../messages/messages.component";
 import { trigger, transition, style } from '@angular/animations';
 import { NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Bloc, TypeBloc } from '../datas/bloc';
+import { TypeBloc } from '../datas/bloc';
 import { Labyrinthe } from '../datas/labyrinthe';
 import { Point } from '../datas/Point';
 import { Cardinalite, Direction, Robot } from '../datas/robot';
@@ -31,8 +31,12 @@ import { map } from 'rxjs/operators';
 export class LabyrintheComponent {
 
   isGameStarted: boolean = false; // pour afficher la div des logs de MessageService
-  labyrinthe: Labyrinthe = new Labyrinthe(12, 11);
-  labyrintheCopy: Labyrinthe = new Labyrinthe(12, 11);
+  static labyrinthe: Labyrinthe = new Labyrinthe(12, 11);
+
+  get LabyrintheView() {
+    return LabyrintheComponent.labyrinthe;
+  }
+
   robot: Robot = new Robot(new Point(), Direction.AVANCER, Cardinalite.NORD, 0);
 
   exitPosition: Point = new Point(0, 0);
@@ -61,12 +65,9 @@ export class LabyrintheComponent {
     this.startPosition = new Point(5, 5);
     this.robot = new Robot(this.startPosition, Direction.AVANCER, Cardinalite.NORD, 0);
 
-    // copie par valeur du labyrinthe initial:
-    this.labyrintheCopy.blocs = this.labyrinthe.blocs.slice();
-
     setTimeout(() => {
       // remplace un élément du tableau par le robot et l'affiche
-      this.labyrinthe.blocs = this.updateLabyrintheWithRobot();
+      this.updateLabyrintheWithRobot();
     }, 1000);
   }
 
@@ -88,7 +89,7 @@ export class LabyrintheComponent {
 
         if(finished === false) {
           // méthode de déplacement du robot
-          this.sortirDuLabyrinthe()
+          this.sortirDuLabyrinthe();
           this.log("robotAction");
           this.log("Robot X = "+ this.robot.position.x.toString());
           this.log("Robot Y = "+ this.robot.position.y.toString());
@@ -98,47 +99,35 @@ export class LabyrintheComponent {
   }
 
   private sortirDuLabyrinthe(): void {
-    // à chaque tour, le labyrinthe est réinitialisé, seule la position du robot sera mise à jour:
-    this.labyrinthe.blocs = this.labyrintheCopy.blocs.slice();
+    // à chaque tour, le labyrinthe est réinitialisé, seule la position du robot sera mise à jour
+
+    // raffraichissement de l'affichage du labyrinthe avec le robot à sa nouvelle position
+    this.robotLastPosition.position.x = this.robot.position.x;
+    this.robotLastPosition.position.y = this.robot.position.y;
 
     // cas 2: suivre le mur jusqu'au décompte == 0, sauf au premier tour
     if (this.compteToursBoucle !== 0 && this.robot.changementDirectionCpte !== 0) {
       this.log("Le robot suit le mur : changementDirectionCpte = "+ this.robot.changementDirectionCpte);
-      this.robot = this.robot.suivreLeMurDeGauche(this.labyrinthe, this.robot);
+      this.robot = this.robot.suivreLeMurDeGauche(this.robot);
 
     // sinon, si décompte == 0 > cas 1: avancer jusqu'au prochain mur et tourner à droite
     } else {
       this.log("Le robot avance tout droit, ou tourne à droite si mur en face, ou se retourne s'il trouve un coin à sa droite");
-      this.robot = this.robot.avancerToutDroitOuAllerADroite(this.labyrinthe, this.robot);
+      this.robot = this.robot.avancerToutDroitOuAllerADroite(this.robot);
     }
 
-    // raffraichissement de l'affichage du labyrinthe avec le robot à sa nouvelle position:
-    this.labyrinthe.blocs = this.updateLabyrintheWithRobot();
+    this.updateLabyrintheWithRobot();
     this.afficherLogsRobot();
 
     this.compteToursBoucle++;
     this.log("*** fin du pas n° "+ this.compteToursBoucle);
   }
 
-  private updateLabyrintheWithRobot(): Bloc[][] {
-    // test autre option:
-    // mais pb, Robot comme cloné, pas déplacé : copie de la ref, pas de la valeur, et pb aussi malgré slice()
-    // this.labyrinthe.blocs[this.robot.position.x][this.robot.position.y].typeBloc = TypeBloc["ROBOT"];
-    // return this.labyrinthe.blocs.slice();
-
-    return this.labyrinthe.blocs.map((row) => {
-        return row.map((cell) => {
-            // Vérifie si la position du robot correspond à la position de la cellule
-            if (cell.position.x === this.robot.position.x && cell.position.y === this.robot.position.y) {
-                return {
-                    ...cell,
-                    typeBloc: TypeBloc.ROBOT, // Remplace le typeBloc.VIDE par TypeBloc.ROBOT
-                    position: cell.position
-                };
-            }
-            return cell; // retourne la cellule inchangée
-        });
-    });
+  updateLabyrintheWithRobot(): void {
+    // l'ancienne position du robot devient un bloc VIDE
+    LabyrintheComponent.labyrinthe.blocs[this.robotLastPosition.position.x][this.robotLastPosition.position.y].typeBloc = TypeBloc.VIDE;
+    // la nouvelle position devient le bloc ROBOT
+    LabyrintheComponent.labyrinthe.blocs[this.robot.position.x][this.robot.position.y].typeBloc = TypeBloc.ROBOT;
   }
 
   private afficherLogsRobot(): void {
