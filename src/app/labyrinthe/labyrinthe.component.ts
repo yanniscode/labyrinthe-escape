@@ -38,6 +38,7 @@ export class LabyrintheComponent {
   }
 
   robot: Robot = new Robot(new Point(), Direction.AVANCER, Cardinalite.NORD, 0);
+  robotLastPosition: Robot = new Robot(new Point(), Direction.AVANCER, Cardinalite.NORD, 0);
 
   exitPosition: Point = new Point(0, 0);
   startPosition: Point = new Point(0, 0);
@@ -60,7 +61,7 @@ export class LabyrintheComponent {
   startIntro(): void {
     this.isGameStarted = true;
     // construction du labyrinthe
-    this.labyrinthe = new Labyrinthe(12, 11);
+    LabyrintheComponent.labyrinthe = new Labyrinthe(12, 11);
     this.exitPosition = new Point(1, 10);
     this.startPosition = new Point(5, 5);
     this.robot = new Robot(this.startPosition, Direction.AVANCER, Cardinalite.NORD, 0);
