@@ -1,6 +1,6 @@
 <div class="content">
     <div class="labyrinthe">
-      <div *ngFor='let row of labyrinthe.blocs' @labyrintheAnimation>
+      <div *ngFor='let row of LabyrintheView.blocs' @labyrintheAnimation>
         <div *ngFor='let bloc of row'>{{bloc.typeBloc}}</div>
       </div>
     </div>
