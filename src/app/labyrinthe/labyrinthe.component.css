@@ -19,13 +19,6 @@ h2 {
 
 .content {
     background-color: #c7c1c1;
-    /* display: flex;
-    align-items: flex-start;
-    justify-content: space-around; */
-    color: #117456;
-    width: 100%;
-    /* max-width: 700px; modif */
-    /* margin-bottom: 3rem; */
 }
 
 .labyrinthe {

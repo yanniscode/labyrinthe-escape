@@ -40,8 +40,8 @@ export class LabyrintheComponent {
   robot: Robot = new Robot(new Point(), Direction.AVANCER, Cardinalite.NORD, 0);
   robotLastPosition: Robot = new Robot(new Point(), Direction.AVANCER, Cardinalite.NORD, 0);
 
-  exitPosition: Point = new Point(0, 0);
-  startPosition: Point = new Point(0, 0);
+  exitPosition: Point = new Point();
+  startPosition: Point = new Point();
 
   // décompte à 0 en début de trajet:
   compteToursBoucle: number = 0;
@@ -64,6 +64,11 @@ export class LabyrintheComponent {
     LabyrintheComponent.labyrinthe = new Labyrinthe(12, 11);
     this.exitPosition = new Point(1, 10);
     this.startPosition = new Point(5, 5);
+
+    // rafraîchissement de l'affichage du labyrinthe avec le robot à sa nouvelle position
+    this.robotLastPosition.position.x = this.startPosition.x;
+    this.robotLastPosition.position.y = this.startPosition.y;
+
     this.robot = new Robot(this.startPosition, Direction.AVANCER, Cardinalite.NORD, 0);
 
     setTimeout(() => {
@@ -102,7 +107,7 @@ export class LabyrintheComponent {
   private sortirDuLabyrinthe(): void {
     // à chaque tour, le labyrinthe est réinitialisé, seule la position du robot sera mise à jour
 
-    // raffraichissement de l'affichage du labyrinthe avec le robot à sa nouvelle position
+    // rafraîchissement de l'affichage du labyrinthe avec le robot à sa nouvelle position
     this.robotLastPosition.position.x = this.robot.position.x;
     this.robotLastPosition.position.y = this.robot.position.y;
 

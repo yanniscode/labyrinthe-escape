@@ -55,7 +55,7 @@ export class Labyrinthe {
         this.blocs[2][8] = new Bloc(new Point(2, 8), TypeBloc.MUR);
         this.blocs[2][9] = new Bloc(new Point(2, 9), TypeBloc.MUR);
         this.blocs[2][10] = new Bloc(new Point(2, 10), TypeBloc.MUR);
-        
+
         this.blocs[3][0] = new Bloc(new Point(3, 0), TypeBloc.MUR);
         this.blocs[3][1] = new Bloc(new Point(3, 1), TypeBloc.VIDE);
         this.blocs[3][2] = new Bloc(new Point(3, 2), TypeBloc.VIDE);
