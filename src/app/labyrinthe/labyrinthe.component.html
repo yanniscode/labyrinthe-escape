@@ -1,9 +1,19 @@
 <div class="content">
     <div class="labyrinthe">
-      <div *ngFor='let row of LabyrintheView.blocs' @labyrintheAnimation>
-        <div *ngFor='let bloc of row'>{{bloc.typeBloc}}</div>
-      </div>
+      <p-table [value]="LabyrintheView.blocs" @labyrintheAnimation>
+        <ng-template pTemplate="body" let-rowData>
+          <tr class="cellsRowMaison">
+            <td *ngFor="let bloc of rowData">
+              <img *ngIf="bloc.typeBloc === 'X'" src="/assets/texture-mur.png" alt='X'/>
+              <img *ngIf="bloc.typeBloc === '_'" src="/assets/texture-visitee.png" alt='_'/>
+              <img *ngIf="bloc.typeBloc === 'S'" src="/assets/texture-base.png" alt='S'/>
+              <img *ngIf="bloc.typeBloc === 'R'" src="/assets/megaman.png" alt='R'/>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
+
     <div>
       <form (ngSubmit)="startRobot()" #labyrintheForm="ngForm">
         <div class="start-button">
@@ -12,7 +22,7 @@
       </form>
     </div>
   </div>
-  
-  <div>
+
+<div>
     <app-messages></app-messages>
 </div>

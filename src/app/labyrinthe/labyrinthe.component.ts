@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MessagesComponent } from "../messages/messages.component";
 import { trigger, transition, style } from '@angular/animations';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TypeBloc } from '../datas/bloc';
 import { Labyrinthe } from '../datas/labyrinthe';
@@ -10,10 +10,11 @@ import { Cardinalite, Direction, Robot } from '../datas/robot';
 import { MessageService } from '../services/message.service';
 import { interval, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-labyrinthe',
-  imports: [MessagesComponent, NgFor, FormsModule],
+  imports: [MessagesComponent, NgFor, NgIf, FormsModule, TableModule],
   templateUrl: './labyrinthe.component.html',
   styleUrl: './labyrinthe.component.css',
   animations: [
@@ -30,7 +31,7 @@ import { map } from 'rxjs/operators';
 })
 export class LabyrintheComponent {
 
-  isGameStarted: boolean = false; // pour afficher la div des logs de MessageService
+  isGameStarted: boolean = false; // pour afficher la div des logs de MessageService : inutile à présent ?
   static labyrinthe: Labyrinthe = new Labyrinthe(12, 11);
 
   get LabyrintheView() {
